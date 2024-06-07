@@ -39,7 +39,48 @@ Complete these tasks before tagging a new release.
 Move the JIRA ticket for the release to the "In Progress" state. Ensure that its fixVersion matches
 the version being released.
 
-#### Ensure Evergreen Passing
+#### Check for Outstanding Vulnerabilities in Dependencies with Snyk
+
+See our [documentation on contributing](./CONTRIBUTING.md) for more details on how to run the `snyk`
+tool locally.
+
+#### Create the Augmented SBOM File for the Upcoming Release
+
+You can use the `scripts/regenerate-augmented-sbom.sh` script for this:
+
+```
+SILK_CLIENT_ID="$client_id" SILK_CLIENT_SECRET="$clent_secret" EVG_TRIGGERED_BY_TAG=100.9.5 ./scripts/regenerate-augmented-sbom.sh
+```
+
+The `EVG_TRIGGERED_BY_TAG` env var should be set to the _next_ version that you are preparing to
+release.
+
+The Silk credentials are shared with our team via 1Password.
+
+**Note that if there have been recent changes to this project's dependencies, these may not be
+reflected in the Augmented SBOM.** That's because new dependencies are only processed once per day.
+These are _first_ processed by Snyk based on the SBOM Lite file, `cyclonedx.sbom.json`. Then another
+service, Silk, ingests this file from Snyk and adds vulnerability information to it. That means it
+can take up to 48 hours before changes to our dependencies are reflected in the generated Augmented
+SBOM.
+
+If there are recently fixed third-party vulnerabilities, make sure that these are reflected in the
+Augmented SBOM before the release.
+
+See our [documentation on contributing](./CONTRIBUTING.md) for more details on how we handle
+dependency scanning and vulnerabilities.
+
+#### Ensure All Static Dependency Checks Pass
+
+The easiest way to do this is to run our linting, which includes `gosec`:
+
+`go run build.go sa:lint`
+
+If `gosec` reports any vulnerabilities, these must be addressed before release. See our
+[documentation on contributing](./CONTRIBUTING.md) for more details on how we handle these
+vulnerabilities.
+
+#### Ensure Evergreen is Passing
 
 Ensure that the build you are releasing is passing the tests on the evergreen waterfall. A
 completely green build is not mandatory, since we do have flaky tests; however, failing tasks should
@@ -196,6 +237,13 @@ Copy your entry from CHANGELOG.md and post it to the
 [MongoDB Community Forums](https://developer.mongodb.com/community/forums/tags/c/developer-tools/49/database-tools)
 in the "Developer Tools" section with the tag `database-tools`. Also post it in the #mongo-tools
 slack channel to announce it internally.
+
+#### Create a New SSDLC Compliance Report for the Release
+
+The report template is at `ssdlc/ssdlc-compliance-report-template.md`. Copy this to a new file
+containing the tag that was released. The name should follow the pattern of
+`ssdlc-compliance-report.$tag.md`. There are various variables in this template. Search for `$` to
+find them. Replace them with the correct values as appropriate.
 
 ### Handling Release Task Failures
 
