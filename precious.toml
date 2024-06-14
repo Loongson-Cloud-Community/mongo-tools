@@ -103,11 +103,12 @@ ignore-stderr = ".*"
 # we use.
 
 [commands.eslint]
-type = "lint"
+type = "both"
 invoke = "once"
 working-dir = "root"
 path-args = "file"
 include = "test/qa-tests/jstests/**/*.js"
 cmd = "./node_modules/.bin/eslint"
+tidy-flags = "--fix"
 ok-exit-codes = [0]
 lint-failure-exit-codes = [1]

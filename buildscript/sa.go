@@ -19,6 +19,8 @@ const (
 	goimportsVersion = "v0.22.0"
 	goimportsPkg     = "golang.org/x/tools/cmd/goimports@" + goimportsVersion
 
+	// This is the latest version to support a YAML config file. Updating to
+	// the new config file syntax did not seem trivial.
 	eslintVersion       = "8.57.0"
 	golangCILintVersion = "1.59.1"
 	golinesVersion      = "0.12.2"
