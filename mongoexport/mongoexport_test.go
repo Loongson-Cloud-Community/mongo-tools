@@ -26,7 +26,7 @@ import (
 )
 
 var (
-	// database with test data
+	// database with test data.
 	testDB             = "mongoexport_test_db"
 	testCollectionName = "coll1"
 )

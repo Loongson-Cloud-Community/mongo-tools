@@ -22,9 +22,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/mongodb/mongo-tools/common/archive"
 	"github.com/mongodb/mongo-tools/common/bsonutil"
 	"github.com/mongodb/mongo-tools/common/db"
@@ -36,6 +33,8 @@ import (
 	"github.com/mongodb/mongo-tools/common/testutil"
 	"github.com/mongodb/mongo-tools/common/util"
 	. "github.com/smartystreets/goconvey/convey"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -43,9 +42,9 @@ import (
 )
 
 var (
-	// database with test data
+	// database with test data.
 	testDB = "mongodump_test_db"
-	// temp database used for restoring a DB
+	// temp database used for restoring a DB.
 	testRestoreDB       = "temp_mongodump_restore_test_db"
 	testCollectionNames = []string{"coll1", "coll2", "coll/three"}
 )
@@ -104,7 +103,7 @@ func simpleMongoDumpInstance() *MongoDump {
 }
 
 // returns the number of .bson files in a directory
-// excluding system.indexes.bson
+// excluding system.indexes.bson.
 func countNonIndexBSONFiles(dir string) (int, error) {
 	files, err := listNonIndexBSONFiles(dir)
 	if err != nil {
@@ -137,7 +136,7 @@ func listNonIndexBSONFiles(dir string) ([]string, error) {
 	return files, nil
 }
 
-// returns count of metadata files
+// returns count of metadata files.
 func countMetaDataFiles(dir string) (int, error) {
 	matchingFiles, err := getMatchingFiles(dir, ".*\\.metadata\\.json")
 	if err != nil {
@@ -146,7 +145,7 @@ func countMetaDataFiles(dir string) (int, error) {
 	return len(matchingFiles), nil
 }
 
-// returns count of oplog entries with 'ui' field
+// returns count of oplog entries with 'ui' field.
 func countOplogUI(iter *db.DecodedBSONSource) int {
 	var count int
 	var doc bson.M
@@ -180,7 +179,7 @@ func countOpsWithUI(doc bson.M) int {
 	return count
 }
 
-// returns filenames that match the given pattern
+// returns filenames that match the given pattern.
 func getMatchingFiles(dir, pattern string) ([]string, error) {
 	fileInfos, err := os.ReadDir(dir)
 	if err != nil {
@@ -202,7 +201,7 @@ func getMatchingFiles(dir, pattern string) ([]string, error) {
 }
 
 // read all the database bson documents from dir and put it into another DB
-// ignore the indexes for now
+// ignore the indexes for now.
 func readBSONIntoDatabase(dir, restoreDBName string) error {
 	if ok := fileDirExists(dir); !ok {
 		return fmt.Errorf("error finding '%v' on local FS", dir)
@@ -1202,7 +1201,7 @@ func TestMongoDumpTOOLS1952(t *testing.T) {
 	})
 }
 
-// Test the fix for nil pointer bug when getCollectionInfo failed
+// Test the fix for nil pointer bug when getCollectionInfo failed.
 func TestMongoDumpTOOLS2498(t *testing.T) {
 	testtype.SkipUnlessTestType(t, testtype.IntegrationTestType)
 	log.SetWriter(io.Discard)
@@ -2182,7 +2181,7 @@ func TestOptionsOrderIsPreserved(t *testing.T) {
 	err = sessionProvider.Run(createViewCmd, &result, testDB)
 	require.NoError(t, err)
 
-	// The check should be run a few times due to the probablistic nature
+	// The check should be run a few times due to the probabilistic nature
 	// of TOOLS-3411
 	for i := 0; i < 10; i++ {
 		dumpAndCheckPipelineOrder(t, collName, pipeline)

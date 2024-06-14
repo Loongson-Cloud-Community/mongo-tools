@@ -100,7 +100,7 @@ func GetFCV(s *mongo.Client) string {
 	return result.Version
 }
 
-// CompareFCV compares two strings as dot-delimited tuples of integers
+// CompareFCV compares two strings as dot-delimited tuples of integers.
 func CompareFCV(x, y string) (int, error) {
 	left, err := dottedStringToSlice(x)
 	if err != nil {
@@ -111,7 +111,7 @@ func CompareFCV(x, y string) (int, error) {
 		return 0, err
 	}
 
-	// Ensure left is the shorter one, flip logic if necesary
+	// Ensure left is the shorter one, flip logic if necessary
 	inverter := 1
 	if len(right) < len(left) {
 		inverter = -1
