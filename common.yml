@@ -727,6 +727,9 @@ tasks:
     commands:
       - func: "fetch source"
       - command: expansions.update
+      - func: "run make target"
+        vars:
+          target: sa:installdevtools
       - func: "generate gosec SARIF report"
 
   - name: check-snyk-results
